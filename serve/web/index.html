@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星眸 XingMou · 0.3B 多模态智能体</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 5 L60 38 L95 40 L67 62 L76 95 L50 76 L24 95 L33 62 L5 40 L40 38 Z' fill='%23f5c66b'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css?v=5">
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<div class="app">
+  <!-- 侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-head">
+      <div class="logo">
+        <span class="logo-star">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 1.5 L14.8 9.2 L22.5 12 L14.8 14.8 L12 22.5 L9.2 14.8 L1.5 12 L9.2 9.2 Z" fill="currentColor"/></svg>
+        </span>
+        <div>
+          <div class="logo-name">星眸 <span class="logo-en">XingMou</span></div>
+          <div class="logo-sub">0.3B · 多模态智能体</div>
+        </div>
+      </div>
+      <button class="btn-new" id="btnNew" title="新对话">
+        <svg viewBox="0 0 24 24" width="14" height="14"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="session-list" id="sessionList"></div>
+    <div class="side-foot">
+      <div class="status-chip" id="statusChip"><span class="dot"></span>连接中…</div>
+      <div class="side-note">本地 GPU 推理 · 由日落星辉开发</div>
+    </div>
+  </aside>
+
+  <!-- 主区 -->
+  <main class="main">
+    <header class="topbar">
+      <div class="top-title">
+        <span id="topTitle">星眸</span>
+        <span class="top-status hidden" id="topStatus"><span class="think-dot"></span>思考中</span>
+      </div>
+      <div class="top-actions">
+        <span class="mode-chip hidden" id="modeChip">强制看图</span>
+        <button class="icon-btn" id="btnSettings" title="生成设置">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 8a4 4 0 100 8 4 4 0 000-8zm9 4a7.6 7.6 0 01-.1 1.2l2 1.6-2 3.4-2.4-1a8 8 0 01-2 1.2l-.4 2.6h-4l-.4-2.6a8 8 0 01-2-1.2l-2.4 1-2-3.4 2-1.6A7.6 7.6 0 013 12c0-.4 0-.8.1-1.2l-2-1.6 2-3.4 2.4 1a8 8 0 012-1.2L8 3h4l.4 2.6a8 8 0 012 1.2l2.4-1 2 3.4-2 1.6c.1.4.1.8.1 1.2z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="chat" id="chat">
+      <!-- 欢迎页 -->
+      <div class="welcome" id="welcome">
+        <div class="hero">
+          <div class="hero-halo"></div>
+          <div class="hero-orbit o1"></div>
+          <div class="hero-orbit o2"></div>
+          <div class="hero-ring"></div>
+          <div class="welcome-star">
+            <svg viewBox="0 0 24 24" width="46" height="46"><path d="M12 1.5 L14.8 9.2 L22.5 12 L14.8 14.8 L12 22.5 L9.2 14.8 L1.5 12 L9.2 9.2 Z" fill="currentColor"/></svg>
+          </div>
+        </div>
+        <h1>星眸 <span>XingMou</span></h1>
+        <p class="welcome-sub">由日落星辉开发 · 0.3B 多模态智能体</p>
+        <div class="agent-status-line"><span class="dot-on"></span>在线 · 随时待命</div>
+        <div class="feature-pills">
+          <button class="cap-card" id="capChat">
+            <span class="cap-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 4h16v12H8l-4 4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="9" cy="10" r="0.9" fill="currentColor"/><circle cx="12.6" cy="10" r="0.9" fill="currentColor"/><circle cx="16.2" cy="10" r="0.9" fill="currentColor"/></svg>
+            </span>
+            <span class="cap-name">聊天</span>
+            <span class="cap-desc">问答 · 常识 · 闲聊</span>
+          </button>
+          <button class="cap-card" id="capVision">
+            <span class="cap-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/></svg>
+            </span>
+            <span class="cap-name">识图</span>
+            <span class="cap-desc">看图 · 描述 · 追问</span>
+          </button>
+        </div>
+        <div class="examples" id="examples"></div>
+        <p class="welcome-note">能力：聊天 + 识图 · 0.3B 小模型，回答仅供参考</p>
+      </div>
+    </div>
+
+    <!-- 输入区 -->
+    <div class="composer">
+      <div class="image-preview hidden" id="imagePreview">
+        <img id="imageThumb" alt="待发送图片">
+        <button class="img-remove" id="imgRemove" title="移除图片">✕</button>
+        <span class="img-tag">待识图</span>
+      </div>
+      <div class="composer-box">
+        <button class="icon-btn" id="btnAttach" title="上传图片">
+          <svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM5 5v11l4-4 3 3 2-2 5 5V5z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="1.8" fill="currentColor"/></svg>
+        </button>
+        <input type="file" id="fileInput" accept="image/*" hidden>
+        <button class="icon-btn vision-toggle" id="btnVision" title="强制看图：开启后所有问题都带图回答；关闭时自动判断图文（默认）">
+          <svg viewBox="0 0 24 24" width="17" height="17"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/></svg>
+        </button>
+        <textarea id="input" rows="1" placeholder="和星眸说点什么…（Enter 发送，Shift+Enter 换行，可拖入/粘贴图片）"></textarea>
+        <button class="btn-send" id="btnSend">
+          发送
+          <svg viewBox="0 0 24 24" width="13" height="13"><path d="M3 11l18-8-8 18-2.5-7.5z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="composer-hint">发图自动识图 · 追问自动判断图文 · 顶栏 👁 可强制看图 · 可拖入/粘贴图片</div>
+    </div>
+  </main>
+</div>
+
+<!-- 设置弹层 -->
+<div class="settings-pop hidden" id="settingsPop">
+  <div class="settings-head">生成设置</div>
+  <label>温度 temperature <input type="range" id="setTemp" min="0.2" max="1.2" step="0.05"><span id="setTempVal"></span></label>
+  <label>核采样 top_p <input type="range" id="setTopP" min="0.5" max="1.0" step="0.02"><span id="setTopPVal"></span></label>
+  <label>候选 top_k <input type="range" id="setTopK" min="1" max="100" step="1"><span id="setTopKVal"></span></label>
+  <label>最大长度 <input type="range" id="setMaxLen" min="64" max="512" step="32"><span id="setMaxLenVal"></span></label>
+  <button class="btn-close" id="btnCloseSettings">关闭</button>
+</div>
+
+<script src="/app.js?v=5"></script>
+</body>
+</html>
