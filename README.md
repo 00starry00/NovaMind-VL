@@ -10,7 +10,7 @@
 
 <div align="center">
   <img src="assets/demo.gif" alt="星眸演示" width="860">
-  <p><sub>演示：文字问答 → 上传图片识图 → 图文自动路由（有图会话里问一般问题自动切回文字模型）</sub></p>
+  <p><sub>演示</sub></p>
 </div>
 
 ---
